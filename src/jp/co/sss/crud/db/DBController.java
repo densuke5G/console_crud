@@ -35,10 +35,14 @@ public class DBController {
 			resultSet = preparedStatement.executeQuery();
 
 			// レコードを出力
-			System.out.println("社員ID\t社員名\t\t性別\t生年月日\t部署名");
+			System.out.println("社員ID\t社員名\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t性別\t生年月日\t部署名");
 			while (resultSet.next()) {
 				System.out.print(resultSet.getString("emp_id") + "\t\t");
-				System.out.print(resultSet.getString("emp_name") + "\t");
+				System.out.print(resultSet.getString("emp_name"));
+				for (int i = 0; i < 30 - resultSet.getString("emp_name").length(); i++) {
+					System.out.print("  ");
+				}
+				System.out.print("\t");
 				int gender = Integer.parseInt(resultSet.getString("gender"));
 				System.out.print(genders[gender - 1] + "\t");
 				System.out.print(resultSet.getString("birthday") + "\t");
@@ -242,11 +246,15 @@ public class DBController {
 			resultSet = preparedStatement.executeQuery();
 
 			// レコードを出力
-			System.out.println("社員ID\t社員名\t\t性別\t生年月日\t部署名");
+			System.out.println("社員ID\t社員名\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t性別\t生年月日\t部署名");
 			int count = 0;
 			while (resultSet.next()) {
 				System.out.print(resultSet.getString("emp_id") + "\t");
-				System.out.print(resultSet.getString("emp_name") + "\t");
+				System.out.print(resultSet.getString("emp_name"));
+				for (int i = 0; i < 30 - resultSet.getString("emp_name").length(); i++) {
+					System.out.print("  ");
+				}
+				System.out.print("\t");
 				int gender = Integer.parseInt(resultSet.getString("gender"));
 				System.out.print(genders[gender - 1] + "\t");
 				System.out.print(resultSet.getString("birthday") + "\t");
@@ -292,11 +300,15 @@ public class DBController {
 			resultSet = preparedStatement.executeQuery();
 
 			// レコードを出力
-			System.out.println("社員ID\t社員名\t\t性別\t生年月日\t部署名");
+			System.out.println("社員ID\t社員名\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t性別\t生年月日\t部署名");
 			int count = 0;
 			while (resultSet.next()) {
 				System.out.print(resultSet.getString("emp_id") + "\t");
-				System.out.print(resultSet.getString("emp_name") + "\t");
+				System.out.print(resultSet.getString("emp_name"));
+				for (int i = 0; i < 30 - resultSet.getString("emp_name").length(); i++) {
+					System.out.print("  ");
+				}
+				System.out.print("\t");
 				int gender = Integer.parseInt(resultSet.getString("gender"));
 				System.out.print(genders[gender - 1] + "\t");
 				System.out.print(resultSet.getString("birthday") + "\t");
