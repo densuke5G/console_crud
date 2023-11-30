@@ -11,9 +11,10 @@ public class SystemStart {
 	 * メイン処理
 	 * @param args	コマンドライン引数
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NumberFormatException {
 		try {
 			int menuNo = 0;
+			String menuNoStr = "";
 			do {
 				// メニューの表示
 				System.out.println("=== 社員管理システム ===");
@@ -24,15 +25,19 @@ public class SystemStart {
 				System.out.println("5. 更新");
 				System.out.println("6. 削除");
 				System.out.println("7. 終了");
-				System.out.print("メニュー番号を入力してください:");
-
+				
 				// メニュー番号の入力
-				BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-				String menuNoStr = br.readLine();
+				BufferedReader br;
+				do {
+					System.out.print("メニュー番号を入力してください:");
+					br = new BufferedReader(new InputStreamReader(System.in));
+					menuNoStr = br.readLine();
+				} while (DBController.checkNumber(menuNoStr, 1, 7));
+				
 				menuNo = Integer.parseInt(menuNoStr);
 
 
-				// 機能の呼出
+				// 機能の呼出 1～7までの入力でそれぞれの機能に分岐
 				switch (menuNo) {
 				case 1:
 					// 全件表示機能の呼出
@@ -67,23 +72,27 @@ public class SystemStart {
 				case 4:
 					String gender;
 					String birthday;
+					// do-while文にて整数・文字列・日付の入力チェック
 					do {
 						// 登録する値を入力
 						System.out.print("社員名:");
 						empName = br.readLine();
+					} while (DBController.checkString(empName, 1, 30));
+					
+					do {
 						System.out.print("性別(1:男性, 2:女性):");
 						gender = br.readLine();
+					} while (DBController.checkNumber(gender, 1, 2));
+					
+					do {
 						System.out.print("生年月日(西暦年/月/日):");
 						birthday = br.readLine();
+					} while (DBController.checkDate(birthday));
+					
+					do {
 						System.out.print("部署ID(1:営業部、2:経理部、3:総務部):");
 						deptId = br.readLine();
-						// 整数の入力チェック
-						// 文字列の入力チェック
-						// 日付の入力チェック
-					} while (DBController.checkNumber(gender, 1, 2) ||
-						DBController.checkNumber(deptId, 1, 3) ||
-						DBController.checkString(empName, 1, 30) ||
-						DBController.checkDate(birthday));
+					} while (DBController.checkNumber(deptId, 1, 3));
 					
 					// 登録機能の呼出
 					DBController.insert(empName, gender, birthday, deptId);
@@ -130,6 +139,7 @@ public class SystemStart {
 				} 
 			// メニュー番号の厳密な入力チェック未実装
 			} while (menuNo != 7);
+		
 		} catch (Exception e) {
 			System.out.println("システムエラーが発生しました");
 			e.printStackTrace();

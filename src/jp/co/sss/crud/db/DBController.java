@@ -35,9 +35,9 @@ public class DBController {
 			resultSet = preparedStatement.executeQuery();
 
 			// レコードを出力
-			System.out.println("社員ID\t社員名\t性別\t生年月日\t部署名");
+			System.out.println("社員ID\t社員名\t\t性別\t生年月日\t部署名");
 			while (resultSet.next()) {
-				System.out.print(resultSet.getString("emp_id") + "\t");
+				System.out.print(resultSet.getString("emp_id") + "\t\t");
 				System.out.print(resultSet.getString("emp_name") + "\t");
 				int gender = Integer.parseInt(resultSet.getString("gender"));
 				System.out.print(genders[gender - 1] + "\t");
@@ -90,7 +90,7 @@ public class DBController {
 			DBManager.close(connection);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param empId		社員ID
@@ -102,7 +102,7 @@ public class DBController {
 	 * @throws SQLException	データベース操作時にエラーが発生した場合に送出
 	 */
 	public static void update(String empId, String empName, String gender, String birthday, String deptId)
-			throws ClassNotFoundException, SQLException, ParseException{
+			throws ClassNotFoundException, SQLException, ParseException {
 		Connection connection = null;
 		PreparedStatement preparedStatement1 = null;
 		PreparedStatement preparedStatement2 = null;
@@ -124,11 +124,11 @@ public class DBController {
 				preparedStatement1.setString(2, empId);
 				// 文字列の入力チェック
 				checkString(empName, 1, 30);
-				
+
 				// SQL文を実行
 				preparedStatement1.executeUpdate();
 			}
-			
+
 			if (gender != "") {
 				// ステートメントを作成
 				String sql2 = "UPDATE employee SET gender = ? WHERE emp_id = ? ";
@@ -138,11 +138,11 @@ public class DBController {
 				preparedStatement2.setString(2, empId);
 				// 整数の入力チェック
 				DBController.checkNumber(gender, 1, 2);
-				
+
 				// SQL文を実行
 				preparedStatement2.executeUpdate();
 			}
-			
+
 			if (birthday != "") {
 				// ステートメントを作成
 				String sql3 = "UPDATE employee SET birthday = ? WHERE emp_id = ? ";
@@ -152,11 +152,11 @@ public class DBController {
 				preparedStatement3.setString(2, empId);
 				// 日付の入力チェック
 				DBController.checkDate(birthday);
-				
+
 				// SQL文を実行
 				preparedStatement3.executeUpdate();
 			}
-			
+
 			if (deptId != "") {
 				// ステートメントを作成
 				String sql4 = "UPDATE employee SET dept_id = ? WHERE emp_id = ? ";
@@ -166,12 +166,11 @@ public class DBController {
 				preparedStatement4.setString(2, empId);
 				// 整数の入力チェック
 				DBController.checkNumber(deptId, 1, 3);
-				
+
 				// SQL文を実行
 				preparedStatement4.executeUpdate();
 			}
-			
-			
+
 			// 登録完了メッセージを出力
 			System.out.println("社員情報を更新しました");
 		} finally {
@@ -182,7 +181,7 @@ public class DBController {
 			DBManager.close(connection);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param empId		社員ID
@@ -214,7 +213,7 @@ public class DBController {
 			DBManager.close(connection);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param empName		社員名
@@ -234,7 +233,7 @@ public class DBController {
 			// ステートメントを作成
 			String sql = """
 					SELECT emp_id, emp_name, gender, TO_CHAR(birthday, 'YYYY/MM/DD') AS birthday,
-						dept_name FROM employee e INNER JOIN department d ON e.dept_id = d.dept_id 
+						dept_name FROM employee e INNER JOIN department d ON e.dept_id = d.dept_id
 						WHERE emp_name LIKE ? ORDER BY emp_id ASC""";
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, "%" + empName + "%");
@@ -243,7 +242,8 @@ public class DBController {
 			resultSet = preparedStatement.executeQuery();
 
 			// レコードを出力
-			System.out.println("社員ID\t社員名\t性別\t生年月日\t部署名");
+			System.out.println("社員ID\t社員名\t\t性別\t生年月日\t部署名");
+			int count = 0;
 			while (resultSet.next()) {
 				System.out.print(resultSet.getString("emp_id") + "\t");
 				System.out.print(resultSet.getString("emp_name") + "\t");
@@ -251,6 +251,10 @@ public class DBController {
 				System.out.print(genders[gender - 1] + "\t");
 				System.out.print(resultSet.getString("birthday") + "\t");
 				System.out.println(resultSet.getString("dept_name"));
+				count++;
+			}
+			if (count == 0) {
+				System.out.println("該当する社員は存在しません");
 			}
 			System.out.println("");
 		} finally {
@@ -279,7 +283,7 @@ public class DBController {
 			// ステートメントを作成
 			String sql = """
 					SELECT emp_id, emp_name, gender, TO_CHAR(birthday, 'YYYY/MM/DD') AS birthday,
-						dept_name FROM employee e INNER JOIN department d ON e.dept_id = d.dept_id 
+						dept_name FROM employee e INNER JOIN department d ON e.dept_id = d.dept_id
 						WHERE e.dept_id LIKE ? ORDER BY emp_id ASC""";
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, "%" + deptId + "%");
@@ -288,10 +292,8 @@ public class DBController {
 			resultSet = preparedStatement.executeQuery();
 
 			// レコードを出力
-			System.out.println("社員ID\t社員名\t性別\t生年月日\t部署名");
-			if (resultSet.next() == false) {
-				System.out.println("該当する社員は存在しません");
-			}
+			System.out.println("社員ID\t社員名\t\t性別\t生年月日\t部署名");
+			int count = 0;
 			while (resultSet.next()) {
 				System.out.print(resultSet.getString("emp_id") + "\t");
 				System.out.print(resultSet.getString("emp_name") + "\t");
@@ -299,6 +301,10 @@ public class DBController {
 				System.out.print(genders[gender - 1] + "\t");
 				System.out.print(resultSet.getString("birthday") + "\t");
 				System.out.println(resultSet.getString("dept_name"));
+				count++;
+			}
+			if (count == 0) {
+				System.out.println("該当する社員は存在しません");
 			}
 			System.out.println("");
 		} finally {
@@ -306,9 +312,9 @@ public class DBController {
 			DBManager.close(preparedStatement);
 			DBManager.close(connection);
 		}
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * @param input		readline()で入力された値
@@ -320,7 +326,7 @@ public class DBController {
 		if (input == "") {
 			return false;
 		}
-		// 文字列の入力チェック
+		// 文字列の入力を排除
 		Pattern pattern = Pattern.compile("^[0-9999]$");
 		if (pattern.matcher(input).matches() == false) {
 			System.out.println(min + "以上" + max + "以下の整数を入力してください");
@@ -332,9 +338,9 @@ public class DBController {
 			return true;
 		}
 		return false;
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * @param input		readline()で入力された値
@@ -346,6 +352,12 @@ public class DBController {
 		if (input == "") {
 			return false;
 		}
+		// 数字の入力を排除
+		Pattern pattern = Pattern.compile("^[ぁ-んァ-ヶｱ-ﾝﾞﾟ一-龠]*$");
+		if (pattern.matcher(input).matches() == false) {
+			System.out.println(min + "文字以上" + max + "文字以下の文字列を入力してください");
+			return true;
+		}
 		// 文字列を文字数で入力チェック
 		if (input.length() > max || input.length() < min) {
 			System.out.println(min + "文字以上" + max + "文字以下の文字列を入力してください");
@@ -353,7 +365,7 @@ public class DBController {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 
 	 * @param input		readline()で入力された値
@@ -362,20 +374,20 @@ public class DBController {
 	 */
 	public static boolean checkDate(String input) throws ParseException {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        dateFormat.setLenient(false);
-        
+		dateFormat.setLenient(false);
+
 		if (input == "") {
 			return false;
 		}
 
 		// 日付を正しい形式で入力チェック
-        try {
-            dateFormat.parse(input);
-        } catch (ParseException e) {
-            System.out.println("正しい形式(西暦年/月/日)で日付を入力してください：");
-            return true;
-        }
-        return false;
+		try {
+			dateFormat.parse(input);
+		} catch (ParseException e) {
+			System.out.println("正しい形式(西暦年/月/日)で日付を入力してください：");
+			return true;
+		}
+		return false;
 	}
-	
+
 }
