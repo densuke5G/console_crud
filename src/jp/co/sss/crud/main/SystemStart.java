@@ -30,8 +30,7 @@ public class SystemStart {
 				BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 				String menuNoStr = br.readLine();
 				menuNo = Integer.parseInt(menuNoStr);
-				// 整数の入力チェック
-				DBController.checkNumber(menuNoStr, 1, 7);
+
 
 				// 機能の呼出
 				switch (menuNo) {
@@ -57,7 +56,7 @@ public class SystemStart {
 					
 					do {
 						// 検索する値を入力
-						System.out.print("部署ID部署ID(1:営業部、2:経理部、3:総務部)を入力してください:");
+						System.out.print("部署ID(1:営業部、2:経理部、3:総務部)を入力してください:");
 						deptId = br.readLine();
 						// 整数の入力チェック
 					} while (DBController.checkNumber(deptId, 1, 3));
@@ -129,6 +128,7 @@ public class SystemStart {
 					DBController.delete(empId);
 					break;
 				} 
+			// メニュー番号の厳密な入力チェック未実装
 			} while (menuNo != 7);
 		} catch (Exception e) {
 			System.out.println("システムエラーが発生しました");
